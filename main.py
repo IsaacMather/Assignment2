@@ -5,12 +5,11 @@ import re
 
 def _link_fisher(url: str, depth=0, reg_ex=""):
     link_list = []
+    headers = {'User-Agent': ''}
 
     if depth == 0:
         link_list.append(url)
         return link_list
-
-    headers = {'User-Agent': ''}
 
     try:
         page = requests.get(url, headers=headers)
@@ -30,17 +29,17 @@ def _link_fisher(url: str, depth=0, reg_ex=""):
         if not pattern.match(link) or not reg_ex == '':
             link = urljoin(url, link)
         link_list.append(link)
-
-        link_list += link_fisher(link, depth - 1, reg_ex)
+        link_list += _link_fisher(link, depth - 1, reg_ex)
 
     link_list.append(url)
-    link_list = list(set(link_list))
     print(link_list)
     return link_list
 
 
 def link_fisher(url: str, depth=0, reg_ex=""):
-        return _link_fisher(url, depth, reg_ex)
+        link_list = _link_fisher(url, depth, reg_ex)
+        link_list = list(set(link_list))
+        return link_list
 
 
 if __name__ == '__main__':
