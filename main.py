@@ -26,7 +26,7 @@ def _link_fisher(url: str, depth=0, reg_ex=""):
     soup = BeautifulSoup(data, features="html.parser")
     for link in soup.find_all('a'):
         link = link.get("href")
-        if not pattern.match(link) or not reg_ex == '':
+        if not pattern.match(link) or reg_ex == '':
             link = urljoin(url, link)
         link_list.append(link)
         link_list += _link_fisher(link, depth - 1, reg_ex)
